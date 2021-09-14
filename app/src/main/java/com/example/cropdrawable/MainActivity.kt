@@ -11,33 +11,32 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_main)
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-            val bitmap = ContextCompat.getDrawable(this, R.drawable.laugh)?.toBitmap()
+        val bitmap = ContextCompat.getDrawable(this, R.drawable.laugh)?.toBitmap()
 
-            bitmap?.apply {
-                originalImageView.setImageBitmap(this)
-                dimensionsOrginalImageTextView.text = " Width : $width , Height:$height "
+        bitmap?.apply {
+            originalImageView.setImageBitmap(this)
+            dimensionsOrginalImageTextView.text = " Width : $width , Height:$height "
 
 
-                floatingActionButton.setOnClickListener {
-                    if (newWidthEditTextView.text.isEmpty() || newHeightEditText.text.isEmpty()) {
-                        dimensionsCroppedImageTextView.text = "Dimensions error"
+            floatingActionButton.setOnClickListener {
+                if (newWidthEditTextView.text.isEmpty() || newHeightEditText.text.isEmpty()) {
+                    dimensionsCroppedImageTextView.text = "Dimensions error"
+                } else {
+                    val newWidth = newWidthEditTextView.text.toString().toInt()
+                    val newHeight = newHeightEditText.text.toString().toInt()
+                    if (newHeight > height || newWidth > width) {
+                        dimensionsCroppedImageTextView.text = "Dimensions exceed original image"
                     } else {
-                        val newWidth = newWidthEditTextView.text.toString().toInt()
-                        val newHeight = newHeightEditText.text.toString().toInt()
-                        if (newHeight > height || newWidth > width) {
-                            dimensionsCroppedImageTextView.text = "Dimensions exceed original image"
-                        } else {
-                            bitmap.apply {
-                                cropRectangle(
-                                    newWidth,
-                                    newHeight
-                                )?.let {
-                                    croppedImageView.setImageBitmap(it)
-                                    dimensionsCroppedImageTextView.text = "Width: $newWidth , height $newHeight"
-                                }
+                        bitmap.apply {
+                            cropRectangle(
+                                newWidth,
+                                newHeight
+                            )?.let {
+                                croppedImageView.setImageBitmap(it)
+                                dimensionsCroppedImageTextView.text = "Width: $newWidth , height $newHeight"
                             }
                         }
                     }
@@ -45,20 +44,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+}
 
-    private fun Bitmap.cropRectangle(
-        newWidth:Int = this.width,
-        newHeight:Int = this.height
-    ):Bitmap?{
-        return try {
-            Bitmap.createBitmap(
-                this, // source bitmap
-                0, // x coordinate of the first pixel in source
-                0, // y coordinate of the first pixel in source
-                newWidth, // width in pixels
-                newHeight // height in pixels
-            )
-        }catch (e:IllegalArgumentException){
-            null
-        }
+private fun Bitmap.cropRectangle(
+    newWidth: Int = this.width,
+    newHeight: Int = this.height
+): Bitmap? {
+    return try {
+        Bitmap.createBitmap(
+            this,
+            0,
+            0,
+            newWidth,
+            newHeight
+        )
+    } catch (e: IllegalArgumentException) {
+        null
     }
+}
