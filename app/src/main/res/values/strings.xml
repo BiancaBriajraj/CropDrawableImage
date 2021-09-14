@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CropDrawable</string>
+    <string name="crop_drawable">Crop Drawable</string>
+    <string name="todo">TODO</string>
+    <string name="height">Height</string>
+    <string name="width">Width</string>
+</resources>
